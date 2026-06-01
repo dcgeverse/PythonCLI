@@ -1,12 +1,94 @@
 import sys
 import os
 import subprocess
+import shutil
 import webbrowser
 from urllib.parse import urlparse
 
 def main():
     print(" ------- PythonCLI ------- ")
     print("Type 'help' for a list of commands, or 'exit' to quit.")
+
+
+def run_system_command(command, shell=False):
+    try:
+        completed = subprocess.run(command, shell=shell)
+        if completed.returncode != 0:
+            print(f"Command failed with exit code {completed.returncode}")
+            return False
+        return True
+    except FileNotFoundError:
+        print("Command not found.")
+    except Exception as e:
+        print(f"Error running command: {e}")
+    return False
+
+
+def install_git():
+    if shutil.which("git"):
+        print("Git is already installed.")
+        return
+    print("Installing Git...")
+    if os.name == 'nt':
+        if shutil.which('winget'):
+            run_system_command(['winget', 'install', '--id', 'Git.Git', '-e', '--source', 'winget'])
+        else:
+            print("Winget is not available on this system. Please install Git manually from https://git-scm.com/downloads")
+            return
+    elif sys.platform == 'darwin':
+        if shutil.which('brew'):
+            run_system_command(['brew', 'install', 'git'])
+        else:
+            print("Homebrew is not installed. Please install Homebrew first or install Git manually.")
+            return
+    else:
+        if shutil.which('apt-get'):
+            run_system_command(['sudo', 'apt-get', 'update'])
+            run_system_command(['sudo', 'apt-get', 'install', '-y', 'git'])
+        elif shutil.which('yum'):
+            run_system_command(['sudo', 'yum', 'install', '-y', 'git'])
+        elif shutil.which('dnf'):
+            run_system_command(['sudo', 'dnf', 'install', '-y', 'git'])
+        else:
+            print("No supported package manager found. Please install Git manually.")
+            return
+    if shutil.which('git'):
+        print("Git installed successfully.")
+    else:
+        print("Git installation may have failed. Please check the output above.")
+
+
+def uninstall_git():
+    if not shutil.which('git'):
+        print("Git is not installed.")
+        return
+    print("Uninstalling Git...")
+    if os.name == 'nt':
+        if shutil.which('winget'):
+            run_system_command(['winget', 'uninstall', '--id', 'Git.Git', '-e'])
+        else:
+            print("Winget is not available on this system. Please uninstall Git manually from Control Panel or Settings.")
+            return
+    elif sys.platform == 'darwin':
+        if shutil.which('brew'):
+            run_system_command(['brew', 'uninstall', 'git'])
+        else:
+            print("Homebrew is not installed. Please remove Git manually if needed.")
+            return
+    else:
+        if shutil.which('apt-get'):
+            run_system_command(['sudo', 'apt-get', 'remove', '-y', 'git'])
+        elif shutil.which('yum'):
+            run_system_command(['sudo', 'yum', 'remove', '-y', 'git'])
+        elif shutil.which('dnf'):
+            run_system_command(['sudo', 'dnf', 'remove', '-y', 'git'])
+        else:
+            print("No supported package manager found. Please uninstall Git manually.")
+            return
+    if not shutil.which('git'):
+        print("Git uninstalled successfully.")
+    else:
+        print("Git uninstall may have failed. Please check the output above.")
 
 while True:
     main()
@@ -20,6 +102,8 @@ while True:
         print("  quiz - Take a short interactive quiz")
         print("  echo - Echo a message")
         print("  info - Show program information")
+        print("  git install - Install Git on this machine")
+        print("  git uninstall - Uninstall Git from this machine")
     elif command == 'exit':
         print("Exiting PythonCLI. Goodbye!")
         sys.exit(0)
@@ -88,5 +172,9 @@ while True:
         print(f"Echo: {message}")
     elif command == 'info':
         print("PythonCLI version 1.01 beta - A simple command-line interface built with Python.")
+    elif command == 'git install':
+        install_git()
+    elif command == 'git uninstall':
+        uninstall_git()
     else:
         print(f"Unknown command: '{command}'. Type 'help' for a list of commands.")
