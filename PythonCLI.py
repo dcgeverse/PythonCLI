@@ -102,6 +102,7 @@ while True:
         print("  quiz - Take a short interactive quiz")
         print("  echo - Echo a message")
         print("  info - Show program information")
+        print("  faq - Show frequently asked questions")
         print("  git install - Install Git on this machine")
         print("  git uninstall - Uninstall Git from this machine")
     elif command == 'exit':
@@ -171,7 +172,20 @@ while True:
         message = input("Enter a message to echo: ")
         print(f"Echo: {message}")
     elif command == 'info':
-        print("PythonCLI version 1.01 beta - A simple command-line interface built with Python.")
+        print("PythonCLI version 1.01.15 beta - A simple command-line interface built with Python.")
+    elif command == 'faq':
+        print("FAQ:")
+        print("  q: How do I use this CLI? a: Type commands and press Enter.")
+        print("  q: How do I exit? a: Use the 'exit' command.")
+        print("  q: Can I run files? a: Yes, use the 'run' command and provide a path.")
+        print("  q: How to install Git? a: Use 'git install' if supported.")
+        print("  q: If I don't have Winget or Homebrew, how do I uninstall Git? a: Go to Control Panel, uninstall a program, find Git, and uninstall it manually. On macOS, you may need to remove Git files manually if Homebrew is not used.")
+        print("  q: What is Git? a: Git is a distributed version control system.")
+        print("  q: Can I run PythonCLI without Python? a: No, it requires Python to run.")
+        print("  q: Is this CLI open source? a: Yes, you can view and modify the code as needed.")
+        print("  q: Can I contribute to this project? a: Yes, contributions are welcome! Please submit pull requests or issues on the project's repository.")
+        print("  q: Python 1 or Python 2 support? a: No, PythonCLI requires Python 3.6 or higher.")
+        print("  q: Update? a: Check the project's repository for updates and new features.")
     elif command == 'git install':
         install_git()
     elif command == 'git uninstall':
